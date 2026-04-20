@@ -151,17 +151,6 @@
     </div><div class="finding" style="margin-bottom:10px">
       <div class="finding-top"><span class="finding-name">Ghost Transmissions</span><span class="finding-name" style="color:var(--text-muted)">11:17:25</span></div>
       <div class="finding-evidence">Severity: MEDIUM · 5+</div>
-<<<<<<< HEAD
-      <div class="finding-desc" style="margin-top:6px">Confirmed Ghost Transmission vulnerability during PO 'Partly Confirm' actions. Flow graph analysis shows a cluster of mDNS broadcasts followed by multiple TCP [SYN] retransmissions (gray arrows) and application-layer retries (pink arrows) from 192.0.2.10 to 203.0.113.89. This indicates a handshake timeout that triggers the browser to send duplicate requests, leading to potential duplicate records in the IFS ERP.</div>
-    </div><div class="finding" style="margin-bottom:10px">
-      <div class="finding-top"><span class="finding-name">BOLA / IDOR</span><span class="finding-name" style="color:var(--text-muted)">10:55:24</span></div>
-      <div class="finding-evidence">Severity: HIGH · API/v1/IntegrationGateway, Purchase order.</div>
-      <div class="finding-desc" style="margin-top:6px">Confirmed BOLA and Fail-open Input Validation on the API/v1/IntegrationGateway endpoint. The API erroneously returns 200 OK for invalid or empty payloads - triggering full database scans and raw data dumps , while lacking server side authorization ( should be 403/404) allowing user to access unauthorized data by guessing IDs.</div>
-    </div><div class="finding" style="margin-bottom:10px">
-      <div class="finding-top"><span class="finding-name">Reverse DNS / PTR</span><span class="finding-name" style="color:var(--text-muted)">11:25:53</span></div>
-      <div class="finding-evidence">Severity: MEDIUM · NXDOMAIN</div>
-      <div class="finding-desc" style="margin-top:6px">Performed reverse DNS lookup on gateway IP 203.0.113.89. Result returned NXDOMAIN, confirming a missing PTR record in the Azure/DNS configuration. This missing record causes external security gateways to distrust the traffic, dropping response packets and serving as the root cause for the TCP retransmissions observed in Test 03.</div>
-=======
       <div class="finding-desc" style="margin-top:6px">Confirmed Ghost Transmission vulnerability during PO 'Partly Confirm' actions. Flow graph analysis shows a cluster of mDNS broadcasts followed by multiple TCP [SYN] retransmissions (gray arrows) and application-layer retries (pink arrows) from 10.23.102.172 to 52.178.214.89. This indicates a handshake timeout that triggers the browser to send duplicate requests, leading to potential duplicate records in the IFS ERP.</div>
     </div><div class="finding" style="margin-bottom:10px">
       <div class="finding-top"><span class="finding-name">BOLA / IDOR</span><span class="finding-name" style="color:var(--text-muted)">10:55:24</span></div>
@@ -171,7 +160,6 @@
       <div class="finding-top"><span class="finding-name">Reverse DNS / PTR</span><span class="finding-name" style="color:var(--text-muted)">11:25:53</span></div>
       <div class="finding-evidence">Severity: MEDIUM · NXDOMAIN</div>
       <div class="finding-desc" style="margin-top:6px">Performed reverse DNS lookup on gateway IP 52.178.214.89. Result returned NXDOMAIN, confirming a missing PTR record in the Azure/DNS configuration. This missing record causes external security gateways to distrust the traffic, dropping response packets and serving as the root cause for the TCP retransmissions observed in Test 03.</div>
->>>>>>> dcdc8a5a5093b1db4b3a4b2a323ebd909abbddf1
     </div><div class="finding" style="margin-bottom:10px">
       <div class="finding-top"><span class="finding-name">Missing Security Headers</span><span class="finding-name" style="color:var(--text-muted)">15:19:59</span></div>
       <div class="finding-evidence">Severity: MEDIUM · HSTS, CSP, X-content type options, X-frame options</div>
@@ -421,22 +409,19 @@ letmein</div>
       <li><div class="step-text"><strong>Start Wireshark capture before testing.</strong> Open Wireshark → select your active network adapter  → click to start capture. Apply display filter:
         <div class="code-block">tcp.analysis.retransmission || tcp.analysis.duplicate_ack || http</div>
         This shows only TCP retransmissions and HTTP traffic.</div></li>
-<<<<<<< HEAD
+
       <li><div class="step-text"><strong>Perform a complete PO confirmation flow.</strong> In the Enterprise UAT portal, go through the full event lifecycle. Do this slowly and deliberately while Wireshark is running.</div></li>
-=======
+
       <li><div class="step-text"><strong>Perform a complete PO confirmation flow.</strong> In the EasyLogic UAT portal, go through the full event lifecycle. Do this slowly and deliberately while Wireshark is running.</div></li>
->>>>>>> dcdc8a5a5093b1db4b3a4b2a323ebd909abbddf1
+
       <li><div class="step-text"><strong>Analyse Wireshark results.</strong> Stop capture (square button). Look for:
         <div class="warn-box"><strong>Ghost transmission indicators:</strong> Packets labelled [TCP Retransmission] or [TCP Duplicate ACK] in Wireshark after the PO confirmation. If you see 3+ retransmissions on the same sequence number, the server sent a response but didn't receive an acknowledgement — the transaction may have been processed twice.</div>
         <div class="expect-box"><strong>Clean transaction:</strong> Clean TCP three-way handshake → HTTP POST → HTTP 200 response → FIN/ACK. No retransmissions.</div>
         Export as: File → Export Packet Dissections → As CSV → save as <em>Wireshark_PO_Capture.csv</em>.</div></li>
       <li><div class="step-text"><strong>Check transaction records match.</strong> After confirming the PO, check the transaction log in the portal. Verify exactly one record was created. If you see duplicate POs with the same reference number — ghost transaction confirmed.</div></li>
-      <li><div class="step-text"><strong>Reverse DNS / PTR check (linked to Test 5).</strong> Open Command Prompt and run:
-<<<<<<< HEAD
+      <li><div class="step-text"><strong>Reverse DNS / PTR check (linked to Test 5).</strong> Open Command Prompt and run
         <div class="code-block">nslookup -type=PTR 203.0.113.89
-=======
         <div class="code-block">nslookup -type=PTR 52.178.214.89
->>>>>>> dcdc8a5a5093b1db4b3a4b2a323ebd909abbddf1
 nslookup -type=TXT company.local </div>
         <div class="warn-box"><strong>FAIL:</strong> nslookup returns NXDOMAIN (no PTR record). This is the root cause of ghost transmissions — external firewalls distrust nameless IPs and drop responses, causing TCP retransmissions.</div>
       </div></li>
