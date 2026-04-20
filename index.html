@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<!-- saved from url=(0061)file:///C:/Users/ASUS/Downloads/security_dashboard%20(1).html -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Security Assessment Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+  .modal-overlay {
+    display: none; /* This ensures it can be hidden */
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+  }
+  /* Show it when we manually trigger it */
+  #add-test-modal[style*="display: flex"], 
+  #add-test-modal[style*="display: block"] {
+    display: flex !important;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="header-top">
+    <div class="header-left">
+      <div class="company-tag"> Internal Security Audit v1.0</div>
+      <h1>Security <span>Assessment</span> Dashboard</h1>
+      <p class="subtitle">STRIDE Threat Modeling · UAT Environment · Research Internship 2026</p>
+    </div>
+    <div class="header-meta">
+      <div class="meta-item">Analyst: <strong>Ishika Trony</strong></div>
+      <div class="meta-item">Framework: <strong>NIST CSF · MITRE ATT&amp;CK</strong></div>
+      <div class="meta-item">Environment: <strong>UAT / Staging</strong></div>
+      <div class="live-badge"> Testing in Progress</div>
+    </div>
+    
+  </div>
+</header>
+
+<!-- Score cards -->
+<div class="score-row">
+  <div class="score-card high" onclick="selectTest(0)" id="card-0">
+    <div class="card-label">Test 01</div>
+    <div class="card-test-name">SQL Injection</div>
+    <div class="card-score green" id="score-0">0.0</div>
+    <div class="card-status" id="status-0"><span class="status-pill sp-low">Pass</span></div>
+  </div>
+  <div class="score-card high" onclick="selectTest(1)" id="card-1">
+    <div class="card-label">Test 02</div>
+    <div class="card-test-name">Credential Bruteforce /DDOS</div>
+    <div class="card-score amber" id="score-1">7.5</div>
+    <div class="card-status" id="status-1"><span class="status-pill sp-high">
+          HIGH
+        </span></div>
+  </div>
+  <div class="score-card medium" onclick="selectTest(2)" id="card-2">
+    <div class="card-label">Test 03</div>
+    <div class="card-test-name">Ghost Transmissions</div>
+    <div class="card-score blue" id="score-2">5.0</div>
+    <div class="card-status" id="status-2"><span class="status-pill sp-medium">
+          MEDIUM
+        </span></div>
+  </div>
+  <div class="score-card high" onclick="selectTest(3)" id="card-3">
+    <div class="card-label">Test 04</div>
+    <div class="card-test-name">BOLA / IDOR</div>
+    <div class="card-score amber" id="score-3">7.5</div>
+    <div class="card-status" id="status-3"><span class="status-pill sp-high">
+          HIGH
+        </span></div>
+  </div>
+  <div class="score-card medium active" onclick="selectTest(4)" id="card-4">
+    <div class="card-label">Test 05</div>
+    <div class="card-test-name">Reverse DNS / PTR</div>
+    <div class="card-score blue" id="score-4">5.0</div>
+    <div class="card-status" id="status-4"><span class="status-pill sp-medium">
+          MEDIUM
+        </span></div>
+  </div>
+  <div class="score-card medium" onclick="selectTest(5)" id="card-5">
+  <div class="card-label">Test 06</div>
+  <div class="card-test-name">Missing Security Headers</div>
+  <div class="card-score blue" id="score-5">5.0</div>
+  <div class="card-status" id="status-5"><span class="status-pill sp-medium">Medium</span></div>
+</div>
+
+<div class="score-card low" onclick="selectTest(6)" id="card-6">
+  <div class="card-label">Test 07</div>
+  <div class="card-test-name">Server Fingerprinting</div>
+  <div class="card-score green" id="score-6">2.5</div>
+  <div class="card-status" id="status-6"><span class="status-pill sp-low">
+          LOW
+        </span></div>
+</div>
+
+<div class="score-card medium" onclick="selectTest(7)" id="card-7">
+  <div class="card-label">Test 08</div>
+  <div class="card-test-name">Sensitive Data Exposure</div>
+  <div class="card-score red" id="score-7">9.8</div>
+  <div class="card-status" id="status-7"><span class="status-pill sp-critical">Critical</span></div>
+</div>
+</div>
+
+<!-- Main grid -->
+<div class="main-grid">
+  <!-- Detail panel -->
+  <div class="detail-panel">
+    <div class="panel-tabs">
+      <div class="tab active" onclick="switchTab(&#39;findings&#39;)">Findings</div>
+      <div class="tab" onclick="switchTab(&#39;evidence&#39;)">Evidence Log</div>
+      <div class="tab" onclick="switchTab(&#39;remediation&#39;)">Remediation</div>
+    </div>
+    <div class="panel-content" id="panel-findings" style="display: block;">
+      <div id="findings-content">
+    <div class="detail-header">
+      <div class="detail-title">Reverse DNS / PTR</div>
+      <div class="detail-sub">Recorded: 2026-03-30 11:25:53 · Severity: MEDIUM</div>
+    </div>
+    <div class="finding-list">
+      <div class="finding">
+        <div class="finding-top"><span class="finding-name" style="color:var(--accent)">Severity: MEDIUM</span></div>
+        <div class="finding-desc">Performed reverse DNS lookup on gateway IP 127.0.0.1. Result returned NXDOMAIN, confirming a missing PTR record in the Azure/DNS configuration. This missing record causes external security gateways to distrust the traffic, dropping response packets and serving as the root cause for the TCP retransmissions observed in Test 03.</div>
+        <div class="finding-evidence">Detail: NXDOMAIN</div>
+      </div>
+      <div class="finding">
+        <div class="finding-name">MITRE ATT&amp;CK</div>
+        <div class="finding-desc">T1583 — Acquire Infrastructure</div>
+      </div>
+      <div class="finding">
+        <div class="finding-name">NIST CSF Controls</div>
+        <div class="finding-desc">ID.AM-3 · PR.PT-4</div>
+      </div>
+    </div></div>
+    </div>
+    <div class="panel-content" id="panel-evidence" style="display: none;">
+      <div id="evidence-log"><div class="finding" style="margin-bottom:10px">
+      <div class="finding-top"><span class="finding-name">SQL Injection</span><span class="finding-name" style="color:var(--text-muted)">14:02:11</span></div>
+      <div class="finding-evidence">Severity: NONE · port 1443</div>
+      <div class="finding-desc" style="margin-top:6px">Scanned port 1443 (SQL Database port) to verify it is not directly accessible from external network, SQL Database is in Private Secured zone, not directly accessible from internet</div>
+    </div><div class="finding" style="margin-bottom:10px">
+      <div class="finding-top"><span class="finding-name">Credential / DDOS</span><span class="finding-name" style="color:var(--text-muted)">10:47:45</span></div>
+      <div class="finding-evidence">Severity: HIGH · 90 + attempts</div>
+      <div class="finding-desc" style="margin-top:6px">Confirmed lack of API Rate limiting and Account Lockout on the authentication endpoint. Automated attack using Burp Intruder (90+ payloads) resulted in no '429 Too many Requests' responses.</div>
+    </div><div class="finding" style="margin-bottom:10px">
+      <div class="finding-top"><span class="finding-name">Ghost Transmissions</span><span class="finding-name" style="color:var(--text-muted)">11:17:25</span></div>
+      <div class="finding-evidence">Severity: MEDIUM · 5+</div>
+      <div class="finding-desc" style="margin-top:6px">Confirmed Ghost Transmission vulnerability during PO 'Partly Confirm' actions. Flow graph analysis shows a cluster of mDNS broadcasts followed by multiple TCP [SYN] retransmissions (gray arrows) and application-layer retries (pink arrows) from 192.0.2.10 to 203.0.113.89. This indicates a handshake timeout that triggers the browser to send duplicate requests, leading to potential duplicate records in the IFS ERP.</div>
+    </div><div class="finding" style="margin-bottom:10px">
+      <div class="finding-top"><span class="finding-name">BOLA / IDOR</span><span class="finding-name" style="color:var(--text-muted)">10:55:24</span></div>
+      <div class="finding-evidence">Severity: HIGH · API/v1/IntegrationGateway, Purchase order.</div>
+      <div class="finding-desc" style="margin-top:6px">Confirmed BOLA and Fail-open Input Validation on the API/v1/IntegrationGateway endpoint. The API erroneously returns 200 OK for invalid or empty payloads - triggering full database scans and raw data dumps , while lacking server side authorization ( should be 403/404) allowing user to access unauthorized data by guessing IDs.</div>
+    </div><div class="finding" style="margin-bottom:10px">
+      <div class="finding-top"><span class="finding-name">Reverse DNS / PTR</span><span class="finding-name" style="color:var(--text-muted)">11:25:53</span></div>
+      <div class="finding-evidence">Severity: MEDIUM · NXDOMAIN</div>
+      <div class="finding-desc" style="margin-top:6px">Performed reverse DNS lookup on gateway IP 203.0.113.89. Result returned NXDOMAIN, confirming a missing PTR record in the Azure/DNS configuration. This missing record causes external security gateways to distrust the traffic, dropping response packets and serving as the root cause for the TCP retransmissions observed in Test 03.</div>
+    </div><div class="finding" style="margin-bottom:10px">
+      <div class="finding-top"><span class="finding-name">Missing Security Headers</span><span class="finding-name" style="color:var(--text-muted)">15:19:59</span></div>
+      <div class="finding-evidence">Severity: MEDIUM · HSTS, CSP, X-content type options, X-frame options</div>
+      <div class="finding-desc" style="margin-top:6px">Inspected all HTTP response headers via Browser DevTools. Identified critical missing security headers: HSTS (Strict-Transport-Security), X-Frame Options, and Content-Security-Policy (CSP). These omissions expose the portal to man-in-the-middle attacks, MIME sniffing, and Clickjacking.</div>
+    </div><div class="finding" style="margin-bottom:10px">
+      <div class="finding-top"><span class="finding-name">Server Fingerprinting</span><span class="finding-name" style="color:var(--text-muted)">11:36:16</span></div>
+      <div class="finding-evidence">Severity: LOW · Microsft IIS/10.0</div>
+      <div class="finding-desc" style="margin-top:6px">Vulnerability identified through server response header inspection. The application reveals specific server software: Microsoft-IIS/10.0. This information disclosure helps attackers identify version-specific exploits and known vulnerabilities targeting Windows Server</div>
+    </div><div class="finding" style="margin-bottom:10px">
+      <div class="finding-top"><span class="finding-name">Sensitive Data Exposure</span><span class="finding-name" style="color:var(--text-muted)">11:56:36</span></div>
+      <div class="finding-evidence">Severity: CRITICAL · Server Version disclosed, Credentials and business Data  stored as Plain text.</div>
+      <div class="finding-desc" style="margin-top:6px">Multi-vector data exposure confirmed. 1)API JSON inspection returned passwords in plaintext2) Confidential Business Data: Integration logs (Kibana) explicitly capture and store LIST_PRICE fields in plaintext. 3) Technical Disclosure: HTTP headers reveal the exact server version (Microsoft-IIS/10.0). </div>
+     <div style="margin: 20px 0; text-align: right;">
+  <button onclick="toggleModal(true)" class="export-btn" style="border-color: var(--purple); color: var(--purple); background: var(--purple-bg);">
+    + ADD CUSTOM TEST CASE
+  </button>
+</div>
+
+<div id="add-test-modal" class="modal-overlay">
+  <div class="modal-content">
+    <h2 style="color:var(--text); margin-bottom:15px;">New Security Test</h2>
+    <input type="text" id="new-test-name" class="modal-input" placeholder="Test Name">
+    <input type="text" id="new-test-mitre" class="modal-input" placeholder="MITRE Technique">
+    <input type="text" id="new-test-nist" class="modal-input" placeholder="NIST Controls">
+    <textarea id="new-test-rem" class="modal-input" style="height:80px;" placeholder="Remediation steps..."></textarea>
+    
+    <div style="display:flex; gap:10px; justify-content:flex-end;">
+      <button onclick="document.getElementById('add-test-modal').style.display='none'" type="button" style="background:none; border:none; color:var(--text-muted); cursor:pointer;">Cancel</button>
+      <button onclick="addNewTest()" class="save-btn">Add Test</button>
+    </div>
+  </div>
+</div>
+    </div></div>
+    </div>
+    <div class="panel-content" id="panel-remediation" style="display: none;">
+      <div id="remediation-content"><div class="finding" style="margin-bottom:10px">
+      <div class="finding-name" style="margin-bottom:6px">Credential / DDOS</div>
+      <div class="finding-desc">Implement account lockout after 5 failed attempts. Add API rate limiting (10 req/min on login endpoint). Consider MFA for procurement officer accounts.</div>
+    </div><div class="finding" style="margin-bottom:10px">
+      <div class="finding-name" style="margin-bottom:6px">Ghost Transmissions</div>
+      <div class="finding-desc">Create PTR record for 203.0.113.89via Azure DNS. Implement idempotency keys on PO confirmation API to prevent duplicate processing.</div>
+    </div><div class="finding" style="margin-bottom:10px">
+      <div class="finding-name" style="margin-bottom:6px">BOLA / IDOR</div>
+      <div class="finding-desc">Enforce server-side ownership checks on every resource endpoint. Add authorization middleware that verifies resource belongs to authenticated user before returning data.</div>
+    </div><div class="finding" style="margin-bottom:10px">
+      <div class="finding-name" style="margin-bottom:6px">Reverse DNS / PTR</div>
+      <div class="finding-desc">Create PTR reverse DNS record for the portal IP. Configure SPF, DKIM, and DMARC for enterprisesolutions.com. Verify FCrDNS resolves correctly after changes.</div>
+    </div><div class="finding" style="margin-bottom:10px">
+      <div class="finding-name" style="margin-bottom:6px">Missing Security Headers</div>
+      <div class="finding-desc">Add security headers: Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, Strict-Transport-Security. Configure via server or reverse proxy.</div>
+    </div><div class="finding" style="margin-bottom:10px">
+      <div class="finding-name" style="margin-bottom:6px">Server Fingerprinting</div>
+      <div class="finding-desc">Disable server version disclosure. Remove X-Powered-By headers. Configure server to hide version (Apache: ServerTokens Prod, Nginx: server_tokens off).</div>
+    </div><div class="finding" style="margin-bottom:10px">
+      <div class="finding-name" style="margin-bottom:6px">Sensitive Data Exposure</div>
+      <div class="finding-desc">Sanitize API responses. Remove debug messages, stack traces, and internal paths. Implement proper error handling and logging on server side only.</div>
+    </div></div>
+    </div>
+  </div>
+
+  <!-- Side panel -->
+  <div class="side-panel">
+    <!-- CVSS Scores -->
+    <div class="side-card">
+      <div class="side-title">CVSS Risk Scores</div>
+      <div id="cvss-panel"><div class="cvss-item">
+      <div class="cvss-label"><span>SQL Injection</span><span style="color:var(--green)">0.0</span></div>
+      <div class="cvss-bar"><div class="cvss-fill" style="width:0%;background:var(--green)"></div></div>
+    </div><div class="cvss-item">
+      <div class="cvss-label"><span>Credential / DDOS</span><span style="color:var(--amber)">7.5</span></div>
+      <div class="cvss-bar"><div class="cvss-fill" style="width:75%;background:var(--amber)"></div></div>
+    </div><div class="cvss-item">
+      <div class="cvss-label"><span>Ghost Transmissions</span><span style="color:var(--accent)">5.0</span></div>
+      <div class="cvss-bar"><div class="cvss-fill" style="width:50%;background:var(--accent)"></div></div>
+    </div><div class="cvss-item">
+      <div class="cvss-label"><span>BOLA / IDOR</span><span style="color:var(--amber)">7.5</span></div>
+      <div class="cvss-bar"><div class="cvss-fill" style="width:75%;background:var(--amber)"></div></div>
+    </div><div class="cvss-item">
+      <div class="cvss-label"><span>Reverse DNS / PTR</span><span style="color:var(--accent)">5.0</span></div>
+      <div class="cvss-bar"><div class="cvss-fill" style="width:50%;background:var(--accent)"></div></div>
+    </div><div class="cvss-item">
+      <div class="cvss-label"><span>Missing Security Headers</span><span style="color:var(--accent)">5.0</span></div>
+      <div class="cvss-bar"><div class="cvss-fill" style="width:50%;background:var(--accent)"></div></div>
+    </div><div class="cvss-item">
+      <div class="cvss-label"><span>Server Fingerprinting</span><span style="color:var(--green)">2.5</span></div>
+      <div class="cvss-bar"><div class="cvss-fill" style="width:25%;background:var(--green)"></div></div>
+    </div><div class="cvss-item">
+      <div class="cvss-label"><span>Sensitive Data Exposure</span><span style="color:var(--red)">9.8</span></div>
+      <div class="cvss-bar"><div class="cvss-fill" style="width:98.00000000000001%;background:var(--red)"></div></div>
+    </div></div>
+    </div>
+
+    <!-- MITRE ATT&CK -->
+    <div class="side-card">
+      <div class="side-title">MITRE ATT&amp;CK Techniques</div>
+      <div class="mitre-grid" id="mitre-panel">
+        <div class="mitre-tag">T1190</div>
+        <div class="mitre-tag">T1110</div>
+        <div class="mitre-tag">T1071</div>
+        <div class="mitre-tag">T1078</div>
+        <div class="mitre-tag">T1557</div>
+        <div class="mitre-tag">T1583</div>
+        <div class="mitre-tag">T1595</div>
+        <div class="mitre-tag">T1592</div>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:var(--text-dim);font-family:var(--mono)" id="mitre-desc">T1583 — Acquire Infrastructure</div>
+    </div>
+
+    <!-- NIST CSF -->
+    <div class="side-card">
+      <div class="side-title">NIST CSF Mapping</div>
+      <div class="nist-row"><div class="nist-function nf-id">ID</div><div><div class="nist-label">Identify</div><div class="nist-controls">ID.RA-1 · ID.RA-3</div></div></div>
+      <div class="nist-row"><div class="nist-function nf-pr">PR</div><div><div class="nist-label">Protect</div><div class="nist-controls">PR.AC-3 · PR.DS-5 · PR.PT-3</div></div></div>
+      <div class="nist-row"><div class="nist-function nf-de">DE</div><div><div class="nist-label">Detect</div><div class="nist-controls">DE.CM-7 · DE.AE-2</div></div></div>
+      <div class="nist-row"><div class="nist-function nf-rs">RS</div><div><div class="nist-label">Respond</div><div class="nist-controls">RS.AN-1 · RS.MI-2</div></div></div>
+      <div class="nist-row"><div class="nist-function nf-rc">RC</div><div><div class="nist-label">Recover</div><div class="nist-controls">RC.RP-1</div></div></div>
+    </div>
+  </div>
+</div>
+<!-- Tool guides for all 5 tests -->
+
+<!-- Test 1: SQL Injection -->
+<div class="tool-section">
+  <div class="tool-header" onclick="toggleGuide(0)">
+    <h3>Test 01 — SQL Injection on 18 API Endpoints</h3>
+    <div class="tool-header-right">
+      <span class="tool-tag">Burp Suite</span><span class="tool-tag">SQLMap</span><span class="tool-tag">OWASP ZAP</span>
+      <span class="chevron" id="chev-0">▼</span>
+    </div>
+  </div>
+  <div class="tool-body" id="guide-0">
+    <ol class="step-list">
+      <li><div class="step-text"><strong>Set up Burp Suite proxy.</strong> Open Burp Suite Community → Proxy → Options → confirm listener on 127.0.0.1:8080. In Firefox, set manual proxy to 127.0.0.1:8080. Install Burp's CA certificate (visit http://burpsuite → download cert → Firefox Settings → Certificates → import).</div></li>
+      <li><div class="step-text"><strong>Capture baseline requests.</strong> Open the  Enterprise portal in Firefox. With Burp Intercept ON, perform a normal action on each endpoint (create a PO, confirm an order, etc.). Every request appears in Burp's HTTP History tab. Right-click each one → Send to Repeater.</div></li>
+      <li><div class="step-text"><strong>Manual injection test per endpoint.</strong> In Repeater, locate text/string fields in the request body or URL parameters. Replace the value with each payload below, send, and observe the response:
+        <div class="code-block">' OR '1'='1
+' OR '1'='1' --
+' UNION SELECT user, password, 'credit_card' FROM users --
+' UNION SELECT NULL, @@version, database() --
+999999999
+-1
+0
+null</div>
+        <div class="expect-box"><strong>PASS (validation working):</strong> Server returns 400 Bad Request with a validation message. Response time is normal.</div>
+        <div class="warn-box"><strong>FAIL (vulnerability confirmed):</strong> Server returns 500 Internal Server Error, or returns 200 with unexpected/empty data, or response time spikes dramatically (time-based injection).</div>
+      </div></li>
+      <li><div class="step-text"><strong>Automated scan with OWASP ZAP.</strong> Open ZAP → Automated Scan → enter the UAT base URL → Attack. After scan completes: Alerts tab will list SQL Injection findings with evidence. Export as HTML report: Report → Generate HTML Report → save as <em>ZAP_SQLi_Report.html</em>.</div></li>
+      <li><div class="step-text"><strong>Record findings.</strong> For each vulnerable endpoint, note: endpoint URL, HTTP method, vulnerable parameter name, payload used, server response code, and response body snippet. Screenshot the Burp Repeater response as evidence.</div></li>
+    </ol>
+    <div class="record-area">
+      <div class="record-label">Record Result</div>
+      <div class="record-grid">
+        <select id="r0-severity">
+          <option value="">Severity</option>
+          <option value="critical">Critical</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+          <option value="none">None / Pass</option>
+        </select>
+        <input type="text" id="r0-endpoints" placeholder="Vulnerable endpoints (e.g. 3/18)">
+      </div>
+      <textarea class="record-note" id="r0-notes" placeholder="Observations: which endpoints failed, what payloads worked, response codes seen..."></textarea>
+      <button class="save-btn" onclick="saveResult(0)">Save Finding</button>
+      <span class="saved-badge" id="saved-0" style="display: none;">✓ Saved</span>
+    </div>
+  </div>
+</div>
+
+<!-- Test 2: Credential Bruteforce -->
+<div class="tool-section">
+  <div class="tool-header" onclick="toggleGuide(1)">
+    <h3>Test 02 — Credential Bruteforce Attack</h3>
+    <div class="tool-header-right">
+      <span class="tool-tag">Burp Intruder</span><span class="tool-tag">OWASP ZAP Fuzzer</span>
+      <span class="chevron" id="chev-1">▼</span>
+    </div>
+  </div>
+  <div class="tool-body" id="guide-1">
+    <ol class="step-list">
+      <li><div class="step-text"><strong>Capture the login request in Burp.</strong> With Burp proxy active, attempt a login with dummy credentials on the Enterprise UAT login page. Find the POST request in HTTP History → right-click → Send to Intruder.</div></li>
+      <li><div class="step-text"><strong>Configure Intruder attack.</strong> In Intruder → Positions tab: clear all auto-selected positions. Highlight the password field value → click Add §. Set Attack Type to <em>Sniper</em>. This sends one payload at a time into the password field only.</div></li>
+      <li><div class="step-text"><strong>Load a small wordlist.</strong> Intruder → Payloads → Payload Type: Simple List. Add these common test passwords:
+        <div class="code-block">password
+Password1
+admin
+123456
+test123
+P@ssw0rd
+welcome1
+letmein</div>
+        In Community edition, Intruder is throttled — this is fine for testing rate limiting behaviour, not for actual cracking.</div></li>
+      <li><div class="step-text"><strong>Start attack and observe.</strong> Click Start Attack. Watch the response codes and lengths carefully:
+        <div class="expect-box"><strong>PASS (rate limiting working):</strong> After 5–10 requests, responses return 429 Too Many Requests, or response contains lockout message. Subsequent requests slow down or stop.</div>
+        <div class="warn-box"><strong>FAIL (no rate limiting):</strong> All 8 requests return 200 or 401 uniformly with no throttling, no lockout, identical response times. This confirms brute force is unrestricted.</div>
+      </div></li>
+      <li><div class="step-text"><strong>Alternative: Use OWASP ZAP Fuzzer.</strong> In ZAP, find the login request in History. Right-click → Attack → Fuzz. Highlight the password value → Add → Add payload list → select File Fuzz DB → jbrofuzz → Authentication → Simple User Passwords. Start Fuzzer. Check for 429 responses in results.</div></li>
+      <li><div class="step-text"><strong>Check account lockout.</strong> Manually attempt 6 logins with the wrong password. After the 6th, try with the correct password. If it still lets you in immediately — no lockout policy is configured. Record this as a confirmed finding.</div></li>
+    </ol>
+    <div class="record-area">
+      <div class="record-label">Record Result</div>
+      <div class="record-grid">
+        <select id="r1-severity">
+          <option value="">Severity</option>
+          <option value="critical">Critical</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+          <option value="none">None / Pass</option>
+        </select>
+        <input type="text" id="r1-lockout" placeholder="Lockout after N attempts">
+      </div>
+      <textarea class="record-note" id="r1-notes" placeholder="Did rate limiting trigger? At what request count? Was 429 returned? Was account locked?"></textarea>
+      <button class="save-btn" onclick="saveResult(1)">Save Finding</button>
+      <span class="saved-badge" id="saved-1">✓ Saved</span>
+    </div>
+  </div>
+</div>
+
+<!-- Test 3: Ghost Transmissions -->
+<div class="tool-section">
+  <div class="tool-header" onclick="toggleGuide(2)">
+    <h3>Test 03 — Ghost Transmissions &amp; TCP Retransmissions</h3>
+    <div class="tool-header-right">
+      <span class="tool-tag">Wireshark</span><span class="tool-tag">nslookup</span><span class="tool-tag">Browser DevTools</span>
+      <span class="chevron" id="chev-2">▼</span>
+    </div>
+  </div>
+  <div class="tool-body" id="guide-2">
+    <ol class="step-list">
+      <li><div class="step-text"><strong>Start Wireshark capture before testing.</strong> Open Wireshark → select your active network adapter (usually "Ethernet" or "Wi-Fi") → click the blue shark fin to start capture. Apply display filter:
+        <div class="code-block">tcp.analysis.retransmission || tcp.analysis.duplicate_ack || http</div>
+        This shows only TCP retransmissions and HTTP traffic.</div></li>
+      <li><div class="step-text"><strong>Perform a complete PO confirmation flow.</strong> In the Enterprise UAT portal, go through the full purchase order lifecycle: Create PO → wait for supplier confirmation page → confirm the order. Do this slowly and deliberately while Wireshark is running.</div></li>
+      <li><div class="step-text"><strong>Analyse Wireshark results.</strong> Stop capture (square button). Look for:
+        <div class="warn-box"><strong>Ghost transmission indicators:</strong> Packets labelled [TCP Retransmission] or [TCP Duplicate ACK] in Wireshark after the PO confirmation. If you see 3+ retransmissions on the same sequence number, the server sent a response but didn't receive an acknowledgement — the transaction may have been processed twice.</div>
+        <div class="expect-box"><strong>Clean transaction:</strong> Clean TCP three-way handshake → HTTP POST → HTTP 200 response → FIN/ACK. No retransmissions.</div>
+        Export as: File → Export Packet Dissections → As CSV → save as <em>Wireshark_PO_Capture.csv</em>.</div></li>
+      <li><div class="step-text"><strong>Check transaction records match.</strong> After confirming the PO, check the transaction log in the portal. Verify exactly one record was created. If you see duplicate POs with the same reference number — ghost transaction confirmed.</div></li>
+      <li><div class="step-text"><strong>Reverse DNS / PTR check (linked to Test 5).</strong> Open Command Prompt and run:
+        <div class="code-block">nslookup -type=PTR 203.0.113.89
+nslookup -type=TXT company.local </div>
+        <div class="warn-box"><strong>FAIL:</strong> nslookup returns NXDOMAIN (no PTR record). This is the root cause of ghost transmissions — external firewalls distrust nameless IPs and drop responses, causing TCP retransmissions.</div>
+      </div></li>
+    </ol>
+    <div class="record-area">
+      <div class="record-label">Record Result</div>
+      <div class="record-grid">
+        <select id="r2-severity">
+          <option value="">Severity</option>
+          <option value="critical">Critical</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+          <option value="none">None / Pass</option>
+        </select>
+        <input type="text" id="r2-retrans" placeholder="Retransmission count observed">
+      </div>
+      <textarea class="record-note" id="r2-notes" placeholder="TCP retransmissions seen? Duplicate POs created? PTR record result? nslookup output..."></textarea>
+      <button class="save-btn" onclick="saveResult(2)">Save Finding</button>
+      <span class="saved-badge" id="saved-2">✓ Saved</span>
+    </div>
+  </div>
+</div>
+
+<!-- Test 4: BOLA -->
+<div class="tool-section">
+  <div class="tool-header" onclick="toggleGuide(3)">
+    <h3>Test 04 — BOLA / IDOR (Broken Object Level Authorization)</h3>
+    <div class="tool-header-right">
+      <span class="tool-tag">Burp Suite Repeater</span><span class="tool-tag">Browser DevTools</span>
+      <span class="chevron" id="chev-3">▼</span>
+    </div>
+  </div>
+  <div class="tool-body" id="guide-3">
+    <ol class="step-list">
+      <li><div class="step-text"><strong>Requirement: two test accounts.</strong> Create two separate UAT accounts — User A (Supplier 1) and User B (Supplier 2) — with at least one PO each.</div></li>
+      <li><div class="step-text"><strong>Log in as User A, capture a resource request.</strong> With Burp proxy active and logged in as User A: navigate to one of User A's purchase orders. The URL will contain an ID like:
+        <div class="code-block">GET /api/orders/1042
+Authorization: Bearer eyJhbGc...</div>
+        </div></li>
+      <li><div class="step-text"><strong>In a separate browser window, log in as User B.</strong> Navigate to User B's orders. Note a different order ID that belongs to User B (e.g. 1087). Do not close this window.</div></li>
+      <li><div class="step-text"><strong>Test cross-user access in Burp Repeater.</strong> Back in Repeater with User A's session token, change the order ID in the URL to User B's ID:
+        <div class="code-block">GET /api/orders/1087
+Authorization: Bearer [User A's token]</div>
+        Send the request.
+        <div class="expect-box"><strong>PASS (authorization working):</strong> Server returns 403 Forbidden or 404 Not Found. User A cannot see User B's order.</div>
+        <div class="warn-box"><strong>FAIL (BOLA confirmed):</strong> Server returns 200 OK with User B's order data. This is a critical BOLA vulnerability — any authenticated user can access any other user's data by guessing IDs.</div>
+      </div></li>
+      <li><div class="step-text"><strong>Test write operations too.</strong> Repeat with PUT and DELETE requests — attempt to modify or delete User B's order using User A's token. Any success is a critical finding.</div></li>
+      <li><div class="step-text"><strong>Test sequential ID enumeration.</strong> Try IDs in sequence around known IDs: /api/orders/1041, 1040, 1039. If these belong to other suppliers and are returned — BOLA is confirmed at scale.</div></li>
+    </ol>
+    <div class="record-area">
+      <div class="record-label">Record Result</div>
+      <div class="record-grid">
+        <select id="r3-severity">
+          <option value="">Severity</option>
+          <option value="critical">Critical</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+          <option value="none">None / Pass</option>
+        </select>
+        <input type="text" id="r3-endpoints" placeholder="Endpoints tested (e.g. orders, shipments)">
+      </div>
+      <textarea class="record-note" id="r3-notes" placeholder="Did cross-user access work? Which endpoints? What data was exposed? HTTP response codes seen..."></textarea>
+      <button class="save-btn" onclick="saveResult(3)">Save Finding</button>
+      <span class="saved-badge" id="saved-3">✓ Saved</span>
+    </div>
+  </div>
+</div>
+
+<!-- Test 5: PTR / Reverse DNS -->
+<div class="tool-section">
+  <div class="tool-header" onclick="toggleGuide(4)">
+    <h3>Test 05 — Reverse DNS Lookup &amp; Missing PTR Records</h3>
+    <div class="tool-header-right">
+      <span class="tool-tag">nslookup</span><span class="tool-tag">dig</span><span class="tool-tag">MXToolbox</span>
+      <span class="chevron" id="chev-4">▼</span>
+    </div>
+  </div>
+  <div class="tool-body" id="guide-4">
+    <ol class="step-list">
+      <li><div class="step-text"><strong>Reverse PTR lookup — Command Prompt.</strong> Open CMD and run:
+        <div class="code-block">nslookup -type=PTR 203.0.113.89
+nslookup -type=PTR 203.0.113.89 8.8.8.8</div>
+        The second command forces Google's DNS to avoid local cache. Record the exact output.</div></li>
+      <li><div class="step-text"><strong>Forward DNS verification (FCrDNS test).</strong> If the PTR lookup returns a domain name, run:
+        <div class="code-block">nslookup [returned-domain-name]</div>
+        Check if it resolves back to 203.0.113.89. If it doesn't match — FCrDNS fails, which triggers spam filter flags and firewall distrust.</div></li>
+      <li><div class="step-text"><strong>Check SPF, DKIM, DMARC records.</strong>
+        <div class="code-block">nslookup -type=TXT enterprisesolutions.com
+nslookup -type=TXT _dmarc.enterprisesolutions.com</div>
+        Look for records starting with "v=spf1" and "v=DMARC1". If absent — email spoofing is possible.
+        <div class="expect-box"><strong>Healthy DNS example:</strong> v=spf1 include:mailprovider.com ~all · v=DMARC1; p=reject; rua=mailto:sec@domain.com</div>
+      </div></li>
+      <li><div class="step-text"><strong>Online verification tools (no install needed).</strong> Visit:
+        <div class="code-block">https://mxtoolbox.com/ReverseLookup.aspx  → enter 203.0.113.89
+https://mxtoolbox.com/spf.aspx           → enter enterprisesolutions.com
+https://mxtoolbox.com/dmarc.aspx         → enter enterprisesolutions.com</div>
+        Screenshot each result as evidence.</div></li>
+      <li><div class="step-text"><strong>Correlate with Wireshark ghost transmission data.</strong> If Test 3 showed TCP retransmissions AND this test confirms missing PTR — you have a causal chain: no PTR → external firewalls distrust traffic → packets dropped → TCP retransmits → duplicate PO processing. Document this linkage explicitly in your report.</div></li>
+    </ol>
+    <div class="record-area">
+      <div class="record-label">Record Result</div>
+      <div class="record-grid">
+        <select id="r4-severity">
+          <option value="">Severity</option>
+          <option value="critical">Critical</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+          <option value="none">None / Pass</option>
+        </select>
+        <input type="text" id="r4-ptr" placeholder="PTR result (NXDOMAIN / domain)">
+      </div>
+      <textarea class="record-note" id="r4-notes" placeholder="PTR lookup output, SPF/DMARC status, MXToolbox results, FCrDNS pass/fail..."></textarea>
+      <button class="save-btn" onclick="saveResult(4)">Save Finding</button>
+      <span class="saved-badge" id="saved-4">✓ Saved</span>
+    </div>
+  </div>
+</div>
+ <div class="tool-section">
+  <div class="tool-header" onclick="toggleGuide(5)">
+    <h3>Test 06 — Missing Security header </h3>
+    <div class="tool-header-right">
+      <span class="tool-tag">Burp Suite</span><span class="tool-tag">Browser DevTools</span><span class="tool-tag">OWASP ZAP</span>
+      <span class="chevron" id="chev-5">▼</span>
+    </div>
+  </div>
+  <div class="tool-body" id="guide-5">
+    <ol class="step-list">
+      <li><div class="step-text"><strong>Capture HTTP response headers.</strong> Open the application in browser → Press F12 → Network tab → reload page → click main request → go to "Headers" → scroll to Response Headers.</div></li>
+
+      <li><div class="step-text"><strong>Check for missing security headers.</strong>
+        <div class="code-block">Content-Security-Policy
+          X-Frame-Options
+        X-Content-Type-Options
+      Strict-Transport-Security
+    </div>
+
+        <div class="warn-box"><strong>FAIL:</strong> One or more headers missing → increases risk of XSS, clickjacking, MIME sniffing.</div>
+        <div class="expect-box"><strong>PASS:</strong> All headers present and properly configured.</div>
+      </div></li>
+
+      <li><div class="step-text"><strong>Verify using Burp Suite.</strong> Intercept request → Send to Repeater → inspect response headers manually.</div></li>
+
+      <li><div class="step-text"><strong>Automated scan with OWASP ZAP.</strong> Run scan → Alerts tab → filter "Missing Security Headers". Export results.</div></li>
+    </ol>
+
+    <div class="record-area">
+      <div class="record-label">Record Result</div>
+      <div class="record-grid">
+        <select id="r5-severity">
+          <option value="">Severity</option>
+          <option value="critical">Critical</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+          <option value="none">None / Pass</option>
+        </select>
+        <input type="text" id="r5-headers" placeholder="Missing headers (e.g. CSP, HSTS)">
+      </div>
+      <textarea class="record-note" id="r5-notes" placeholder="Which headers missing? Any misconfigurations?"></textarea>
+      <button class="save-btn" onclick="saveResult(5)">Save Finding</button>
+      <span class="saved-badge" id="saved-5">✓ Saved</span>
+    </div>
+  </div>
+</div>
+<div class="tool-section">
+  <div class="tool-header" onclick="toggleGuide(6)">
+    <h3>Test 07 — Server Fingerprinting</h3>
+    <div class="tool-header-right">
+      <span class="tool-tag">Burp Suite</span><span class="tool-tag">curl</span><span class="tool-tag">Nmap</span>
+      <span class="chevron" id="chev-6">▼</span>
+    </div>
+  </div>
+  <div class="tool-body" id="guide-6">
+    <ol class="step-list">
+      <li><div class="step-text"><strong>Inspect response headers.</strong>
+        <div class="code-block">Server: Apache/2.4.41 (Ubuntu)
+X-Powered-By: PHP/7.4.3</div>
+
+        <div class="warn-box"><strong>FAIL:</strong> Server version exposed → attackers can target known vulnerabilities.</div>
+        <div class="expect-box"><strong>PASS:</strong> Headers do not reveal version info.</div>
+      </div></li>
+
+      <li><div class="step-text"><strong>Use curl command.</strong>
+        <div class="code-block">curl -I https://target-url.com</div>
+      </div></li>
+
+      <li><div class="step-text"><strong>Run Nmap version detection.</strong>
+        <div class="code-block">nmap -sV target-ip</div>
+      </div></li>
+
+      <li><div class="step-text"><strong>Check error pages.</strong> Trigger invalid URL → observe if stack traces or server info is revealed.</div></li>
+    </ol>
+
+    <div class="record-area">
+      <div class="record-label">Record Result</div>
+      <div class="record-grid">
+        <select id="r6-severity">
+          <option value="">Severity</option>
+          <option value="critical">Critical</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+          <option value="none">None / Pass</option>
+        </select>
+        <input type="text" id="r6-server" placeholder="Server detected (e.g. Apache, Nginx)">
+      </div>
+      <textarea class="record-note" id="r6-notes" placeholder="Was version exposed? Headers? Error responses?"></textarea>
+      <button class="save-btn" onclick="saveResult(6)">Save Finding</button>
+      <span class="saved-badge" id="saved-6">✓ Saved</span>
+    </div>
+  </div>
+</div>
+<div class="tool-section">
+  <div class="tool-header" onclick="toggleGuide(7)">
+    <h3>Test 08 — Sensitive Information Disclosure</h3>
+    <div class="tool-header-right">
+      <span class="tool-tag">Burp Suite</span><span class="tool-tag">OWASP ZAP</span><span class="tool-tag">Browser DevTools</span>
+      <span class="chevron" id="chev-7">▼</span>
+    </div>
+  </div>
+  <div class="tool-body" id="guide-7">
+    <ol class="step-list">
+      <li><div class="step-text"><strong>Inspect API responses.</strong> Use Burp Repeater → send requests → check response body for:
+        <div class="code-block">Internal paths
+Stack traces
+Debug messages
+Database queries
+Email addresses</div>
+      </div></li>
+
+      <li><div class="step-text"><strong>Trigger error conditions.</strong> Send invalid inputs:
+        <div class="code-block">' OR 1=1
+{}
+null
+999999999</div>
+
+        <div class="warn-box"><strong>FAIL:</strong> Stack traces, SQL errors, or internal details exposed.</div>
+        <div class="expect-box"><strong>PASS:</strong> Generic error messages only.</div>
+      </div></li>
+
+      <li><div class="step-text"><strong>Check browser DevTools.</strong> Network tab → inspect JSON responses for hidden fields or sensitive data.</div></li>
+
+      <li><div class="step-text"><strong>Automated scan using ZAP.</strong> Look for "Information Disclosure" alerts.</div></li>
+    </ol>
+
+    <div class="record-area">
+      <div class="record-label">Record Result</div>
+      <div class="record-grid">
+        <select id="r7-severity">
+          <option value="">Severity</option>
+          <option value="critical">Critical</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+          <option value="none">None / Pass</option>
+        </select>
+        <input type="text" id="r7-data" placeholder="Data exposed (e.g. stack trace, API keys)">
+      </div>
+      <textarea class="record-note" id="r7-notes" placeholder="What sensitive data was exposed? Under what conditions?"></textarea>
+      <button class="save-btn" onclick="saveResult(7)">Save Finding</button>
+      <span class="saved-badge" id="saved-7" style="display: none;">✓ Saved</span>
+    </div>
+  </div>
+</div>
+
+
+</div>
+<div id="add-test-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:100; align-items:center; justify-content:center; padding:20px;">
+  <div style="background:var(--bg2); border:1px solid var(--border-bright); border-radius:8px; width:100%; max-width:500px; padding:24px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+    <h2 style="margin-bottom:16px; color:var(--text);">Add Custom Security Test</h2>
+    
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <input type="text" id="new-test-name" placeholder="Test Name (e.g., Cross-Site Scripting)" style="width:100%; background:var(--bg); border:1px solid var(--border); padding:10px; color:white; border-radius:4px;">
+      
+      <input type="text" id="new-test-mitre" placeholder="MITRE Technique (e.g., T1059)" style="width:100%; background:var(--bg); border:1px solid var(--border); padding:10px; color:white; border-radius:4px;">
+      
+      <input type="text" id="new-test-nist" placeholder="NIST Controls (e.g., PR.DS-1)" style="width:100%; background:var(--bg); border:1px solid var(--border); padding:10px; color:white; border-radius:4px;">
+      
+      <textarea id="new-test-remediation" placeholder="Remediation steps..." style="width:100%; background:var(--bg); border:1px solid var(--border); padding:10px; color:white; border-radius:4px; height:80px;"></textarea>
+    </div>
+
+    <div style="margin-top:20px; display:flex; gap:10px; justify-content:flex-end;">
+      <button onclick="toggleModal(false)" style="background:transparent; color:var(--text-muted); border:none; cursor:pointer; font-family:var(--mono);">Cancel</button>
+      <button onclick="addNewTest()" style="background:var(--accent); color:white; border:none; padding:8px 20px; border-radius:4px; cursor:pointer; font-family:var(--mono); font-weight:600;">Add to Dashboard</button>
+    </div>
+  </div>
+</div>
+
+<div style="margin-bottom: 20px; text-align: right;">
+  <button onclick="toggleModal(true)" style="background:var(--bg3); color:var(--accent); border:1px solid var(--accent); padding:6px 12px; border-radius:4px; cursor:pointer; font-family:var(--mono); font-size:11px;">+ NEW TEST CASE</button>
+</div>
+<footer>
+  <div class="footer-left">Enterprise Security Research · UAT Environment · Tools: Burp Suite Community · OWASP ZAP · Wireshark · nslookup</div>
+  <button class="export-btn" onclick="exportReport()">Export Report JSON</button>
+  </footer>
+ 
+<script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
