@@ -12,6 +12,8 @@ This dashboard was built to present the results of a black-box security assessme
 
 All findings are embedded directly in the code (`data.js`), so the full report is visible to anyone who visits the link — no login or backend required.
 
+![Dashboard Screenshot](screenshot.png)
+
 ---
 
 ## Security Tests Covered
