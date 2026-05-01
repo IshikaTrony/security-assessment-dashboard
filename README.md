@@ -2,7 +2,7 @@
 
 A client-side web dashboard built to document, visualise, and present a security infrastructure analysis and vulnerability assessment dashboard for an enterprise ERP integration system. Developed as part of a Security Research Internship in 2026.
 
-**Live demo →** [IshikaTrony.github.io/security-assessment-dashboard](https://IshikaTrony.github.io/security-assessment-dashboard)
+
 
 ---
 
